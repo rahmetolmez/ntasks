@@ -16,11 +16,13 @@ typedef struct Image
 {
 	WINDOW* win;
 	char img[IMAGE_HEIGHT][IMAGE_WIDTH];
+	char* text;
+	int textLength;
 	int xPos, yPos;
 
 }Image;
 
-Image* imageCreate(int x, int y);
+Image* imageCreate(int x, int y, const char* text, int textLength);
 void imageDraw(Image* image);
 void imageMove(Image* image, char direction, int distance);
 void imageSet(Image* image, char img[IMAGE_HEIGHT][IMAGE_WIDTH]);

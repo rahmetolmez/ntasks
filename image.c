@@ -1,14 +1,19 @@
 /*REFACTOR TO CARD */
 #include"image.h"
 #include<stdlib.h>
+#include<string.h>
 
-Image* imageCreate(int x, int y)
+Image* imageCreate(int x, int y, const char* text, int textLength)
 {
 	Image* newImage = (Image*)malloc(sizeof(Image));
-
+	newImage->textLength = textLength;
+	newImage->text = (char*)malloc(sizeof(char) * newImage->textLength + 1);
+	//text[textLength - 1] = '\0';
+	strcpy(newImage->text, text);
 	newImage->xPos = x;
     	newImage->yPos = y;
 
+	//printf("%s", newImage->text);
 	nodelay(newImage->win, 1); /* Not sure of this */
     	newImage->win = newwin(IMAGE_WINDOW_HEIGHT, IMAGE_WINDOW_WIDTH, newImage->yPos, newImage->xPos);
     	//box(newImage->win, 0, 0);
@@ -16,6 +21,7 @@ Image* imageCreate(int x, int y)
 
     	///refresh();
     	///wrefresh(newImage->win);
+	wprintw(newImage->win, newImage->text);
 	wnoutrefresh(newImage->win);
  
     	return newImage;
@@ -55,8 +61,9 @@ void imageDraw(Image* image)
     wbkgd(image->win, COLOR_PAIR(4));
     mvwin(image->win, image->yPos, image->xPos);
     ///wrefresh(image->win);
+    //wprintw(image->win, image->text);
     wnoutrefresh(image->win);
-    doupdate();
+    //doupdate();
 }
 
 void imageMove(Image* image, char direction, int distance)
@@ -69,7 +76,6 @@ void imageMove(Image* image, char direction, int distance)
         image->yPos += distance;
     if(direction == 'd')
         image->xPos += distance;
-
 }
 
 void imageSet(Image* image, char img[IMAGE_HEIGHT][IMAGE_WIDTH])

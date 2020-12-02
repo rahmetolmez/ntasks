@@ -2,10 +2,13 @@
 #include<ncurses.h>
 #include<unistd.h>
 #include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
 #define COLOR_OFFSET 3.92
 
 WINDOW* win;
+const char * getString();
 
 int main(int argc, char** argv)
 {
@@ -19,8 +22,8 @@ int main(int argc, char** argv)
     start_color();
     clear();
     refresh();
-
-    
+    //scrollok(win, TRUE);
+    char * text;
     init_color(COLOR_RED, 245 * COLOR_OFFSET, 164 * COLOR_OFFSET, 71 * COLOR_OFFSET);
     if(can_change_color() && COLORS >= 16)
 	init_color(15, 1000, 1000, 1000);
@@ -39,12 +42,12 @@ int main(int argc, char** argv)
 
     Card* card = cardCreate("      Backlog", "  + Add card (c)", 1, 1);
     Card* card2 = cardCreate("     To Do", "  + Add card (c)", CARD_WIDTH + 1, 1);
-    Card* card3 = cardCreate("     In Progress", "  + Add card (c)", 2 * CARD_WIDTH + 1, 1);
+    Card* card3 = cardCreate("   In Progress", "  + Add card (c)", 2 * CARD_WIDTH + 1, 1);
 
     Card* card4 = cardCreate(" Taking Too Long", "  + Add card (c)",3 * CARD_WIDTH + 1, 1);
-    Card* card5 = cardCreate("     Done", "  + Add card (c)", 4 * CARD_WIDTH + 1, 1);
-    Card* card6 = cardCreate("     Notes", "  + Add card (c)", 5 * CARD_WIDTH + 1, 1);
-    Card* card7 = cardCreate("     Ideas", "  + Add card (c)", 6 * CARD_WIDTH + 1, 1);
+    Card* card5 = cardCreate("       Done", "  + Add card (c)", 4 * CARD_WIDTH + 1, 1);
+    Card* card6 = cardCreate("      Notes", "  + Add card (c)", 5 * CARD_WIDTH + 1, 1);
+    Card* card7 = cardCreate("      Ideas", "  + Add card (c)", 6 * CARD_WIDTH + 1, 1);
 
     Card* currentCard = card;
 
@@ -63,31 +66,50 @@ int main(int argc, char** argv)
 			{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'}
     			};
 
+    //cardAddImage(card);
     imageSet(card->img, whiteBg);
+    //imageSet(card->images[0], whiteBg);
 
     int cardCounter = 1;
 
-    char ch = 'n';
+    int ch = 'n';
     while(ch != 'q')
     {
         
+	if(ch != ERR)
+		clear();
 	//erase();
         ch = getch();
 	
         switch(ch)
         {
             case 'w':
+	    case KEY_UP:
                 cardMove(currentCard, 'w', currentCard->height / 2);
                 break;
             case 'a':
+	    case KEY_LEFT:
                 cardMove(currentCard, 'a', currentCard->width);
                 break;
             case 's':
+	    case KEY_DOWN:
                 cardMove(currentCard, 's', currentCard->height / 2);
                 break;
             case 'd':
+	    case KEY_RIGHT:
                 cardMove(currentCard, 'd', currentCard->width);
                 break;
+	    case 'c':
+		text = (char*)malloc(200);
+		wgetnstr(currentCard->win, text, 100);
+		printf("text: %s, size %ld", text, strlen(text));
+		cardAddImage(currentCard, text, strlen(text));
+		break;
+	    case 't':
+		//getstr(currentCard->images[0]->text);
+		//mvprintw(0, 39, "%s", currentCard->images[0]->text);
+		//wnoutrefresh(win);
+		break;
 	    case ' ':
 		currentCard = deck[cardCounter];
 		cardCounter++;
@@ -101,8 +123,7 @@ int main(int argc, char** argv)
 	if(cardCounter == 7)
 		cardCounter = 0;
 
-	if(ch != ERR)
-		clear();
+	
     	for(int i = 0; i < 7; i++)
 		cardDraw(deck[i]);
 	
@@ -115,7 +136,7 @@ int main(int argc, char** argv)
 	//cardDraw(card5);
 	//cardDraw(card6);
 	//cardDraw(card7);
-        usleep(45000);
+        usleep(1900);
     }
 
     delwin(card->win);
@@ -129,4 +150,34 @@ int main(int argc, char** argv)
     endwin();
     
     return 0;
+}
+
+const char * getString()
+{
+    char* input = (char*)malloc(sizeof(char) * 200);
+
+    // let the terminal do the line editing
+    nocbreak();
+    echo();
+
+    // this reads from buffer after <ENTER>, not "raw" 
+    // so any backspacing etc. has already been taken care of
+    int ch = getch();
+    input[0] = '\0';
+    char chr = (char)ch;
+    int i = 0;
+    while ( ch != '\n' )
+    {
+	strncat(input, &chr, i + 1);
+	input[i + 1] = '\0';
+        //input[i] = ch;
+        ch = getch();
+	chr = (char)ch;
+	i++;
+    }
+
+    // restore your cbreak / echo settings here
+    printf("%s", input);
+    printf("helllo");
+    return input;
 }
