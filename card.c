@@ -11,7 +11,7 @@ Card* cardCreate(const char* title, const char* text, int x, int y)
     strcpy(newCard->title, title);
     strcpy(newCard->text, text);
   
-    newCard->img = imageCreate(x + 1, y + 2);
+    newCard->img = imageCreate(x + 2, y + 2);
 
     newCard->xPos = x;
     newCard->yPos = y;
@@ -72,5 +72,5 @@ void cardDraw(Card* card)
     wnoutrefresh(card->win);
     //doupdate();
 
-    ///imageDraw(card->img);
+    imageDraw(card->img);
 }

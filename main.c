@@ -22,21 +22,29 @@ int main(int argc, char** argv)
 
     
     init_color(COLOR_RED, 245 * COLOR_OFFSET, 164 * COLOR_OFFSET, 71 * COLOR_OFFSET);
+    if(can_change_color() && COLORS >= 16)
+	init_color(15, 1000, 1000, 1000);
+    if(COLORS >= 16){
+	init_pair(4, COLOR_BLACK, 15);
+    }
+    else
+	init_pair(4, COLOR_BLACK, COLOR_WHITE);
+
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
-    //init_pair(2, COLOR_BLACK, COLOR_BLACK);
-    //init_pair(3, COLOR_CYAN, COLOR_CYAN);
-    //init_pair(4, COLOR_WHITE, COLOR_WHITE);
+    init_pair(2, COLOR_BLACK, COLOR_BLACK);
+    init_pair(3, COLOR_CYAN, COLOR_CYAN);
+    ///init_pair(4, COLOR_WHITE, COLOR_WHITE);
 
     //wbkgd(win, COLOR_PAIR(1));
 
     Card* card = cardCreate("      Backlog", "  + Add card (c)", 1, 1);
     Card* card2 = cardCreate("     To Do", "  + Add card (c)", CARD_WIDTH + 1, 1);
-    Card* card3 = cardCreate("     In Progress", "    tribow (c)", 2 * CARD_WIDTH + 1, 1);
+    Card* card3 = cardCreate("     In Progress", "  + Add card (c)", 2 * CARD_WIDTH + 1, 1);
 
-    Card* card4 = cardCreate(" Taking Too Long", "    ",3 * CARD_WIDTH + 1, 1);
-    Card* card5 = cardCreate("     Done", "    ", 4 * CARD_WIDTH + 1, 1);
-    Card* card6 = cardCreate("     Notes", "    ", 5 * CARD_WIDTH + 1, 1);
-    Card* card7 = cardCreate("     Ideas", "    ", 6 * CARD_WIDTH + 1, 1);
+    Card* card4 = cardCreate(" Taking Too Long", "  + Add card (c)",3 * CARD_WIDTH + 1, 1);
+    Card* card5 = cardCreate("     Done", "  + Add card (c)", 4 * CARD_WIDTH + 1, 1);
+    Card* card6 = cardCreate("     Notes", "  + Add card (c)", 5 * CARD_WIDTH + 1, 1);
+    Card* card7 = cardCreate("     Ideas", "  + Add card (c)", 6 * CARD_WIDTH + 1, 1);
 
     Card* currentCard = card;
 
@@ -49,18 +57,13 @@ int main(int argc, char** argv)
     deck[5] = card6;
     deck[6] = card7;
 
-    char blui[8][16] = {
-	    		{'m', 'm', 'm', 'm', 'm', 'm', 'm', 'm', 'w', 'w', 'w', 'w', 'm', 'm', 'm', 'm'},
-   			{'m', 'm', 'w', 'w', 'm', 'm', 'w', 'w', 'c', 'c', 'w', 'w', 'w', 'w', 'm', 'm'},
-			{'w', 'w', 'm', 'm', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
-    			{'w', 'w', 'm', 'm', 'm', 'm', 'w', 'w', 'm', 'm', 'm', 'm', 'w', 'w', 'w', 'w'},
-			{'w', 'w', 'w', 'w', 'w', 'w', 'm', 'm', 'm', 'm', 'w', 'w', 'w', 'w', 'w', 'w'},
-			{'m', 'm', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'm', 'm'},
-			{'m', 'm', 'm', 'm', 'm', 'm', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'm', 'm'},
-			{'m', 'm', 'm', 'm', 'w', 'w', 'm', 'm', 'm', 'm', 'w', 'w', 'm', 'm', 'm', 'm'}
+    char whiteBg[3][14] = {
+	    		{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
+   			{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
+			{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'}
     			};
 
-    imageSet(card->img, blui);
+    imageSet(card->img, whiteBg);
 
     int cardCounter = 1;
 
@@ -74,16 +77,16 @@ int main(int argc, char** argv)
         switch(ch)
         {
             case 'w':
-                cardMove(currentCard, 'w', 10);
+                cardMove(currentCard, 'w', currentCard->height / 2);
                 break;
             case 'a':
-                cardMove(currentCard, 'a', 20);
+                cardMove(currentCard, 'a', currentCard->width);
                 break;
             case 's':
-                cardMove(currentCard, 's', 10);
+                cardMove(currentCard, 's', currentCard->height / 2);
                 break;
             case 'd':
-                cardMove(currentCard, 'd', 20);
+                cardMove(currentCard, 'd', currentCard->width);
                 break;
 	    case ' ':
 		currentCard = deck[cardCounter];

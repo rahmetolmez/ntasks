@@ -1,3 +1,4 @@
+/*REFACTOR TO CARD */
 #include"image.h"
 #include<stdlib.h>
 
@@ -13,8 +14,9 @@ Image* imageCreate(int x, int y)
     	//box(newImage->win, 0, 0);
 	//wbkgd(newImage->win, COLOR_PAIR(1));
 
-    	refresh();
-    	wrefresh(newImage->win);
+    	///refresh();
+    	///wrefresh(newImage->win);
+	wnoutrefresh(newImage->win);
  
     	return newImage;
 }
@@ -22,7 +24,7 @@ Image* imageCreate(int x, int y)
 void imageDraw(Image* image)
 {
     int i, j;
-    for(i = 0; i < IMAGE_HEIGHT; i++)
+    /*for(i = 0; i < IMAGE_HEIGHT; i++)
     {
     	for(j = 0; j < IMAGE_WIDTH; j++)
 	{
@@ -30,27 +32,31 @@ void imageDraw(Image* image)
 		{
 			wattron(image->win, COLOR_PAIR(3));
 			mvwaddch(image->win, i + 1, j + 1, image->img[i][j]);
-			wattron(image->win, COLOR_PAIR(3));
+			wattroff(image->win, COLOR_PAIR(3));
 		}
 		if(image->img[i][j] == BLACK)
 		{
 			wattron(image->win, COLOR_PAIR(2));
 			mvwaddch(image->win, i + 1, j + 1, image->img[i][j]);
-			wattron(image->win, COLOR_PAIR(2));
+			wattroff(image->win, COLOR_PAIR(2));
 		}
 		if(image->img[i][j] == WHITE)
 		{
 			wattron(image->win, COLOR_PAIR(4));
 			mvwaddch(image->win, i + 1, j + 1, image->img[i][j]);
-			wattron(image->win, COLOR_PAIR(4));
+			wattroff(image->win, COLOR_PAIR(4));
 		}
 		/*wattron(image->win, COLOR_PAIR(2));
 		mvwaddch(image->win, i + 1, j + 1, image->img[i][j]);
-		wattroff(image->win, COLOR_PAIR(2));	*/
+		wattroff(image->win, COLOR_PAIR(2));
 	}
-    }
+	
+    }*/
+    wbkgd(image->win, COLOR_PAIR(4));
     mvwin(image->win, image->yPos, image->xPos);
-    wrefresh(image->win);
+    ///wrefresh(image->win);
+    wnoutrefresh(image->win);
+    doupdate();
 }
 
 void imageMove(Image* image, char direction, int distance)
