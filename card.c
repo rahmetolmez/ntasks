@@ -5,15 +5,15 @@
 Card* cardCreate(const char* title, const char* text, int x, int y)
 {
     Card* newCard = (Card*)malloc(sizeof(Card));
-    
+
     newCard->title = (char*)malloc(sizeof(char) * TITLE_LENGTH);
     newCard->text = (char*)malloc(sizeof(char) * TEXT_LENGTH);
     strcpy(newCard->title, title);
     strcpy(newCard->text, text);
-  
+
     //newCard->img = imageCreate(x + 2, y + 2, "", 0);
     //newCard->images[0] = imageCreate(x + 2, y + 2 + IMAGE_HEIGHT + 3);
-    
+
     newCard->imageCount = 0;
     newCard->xPos = x;
     newCard->yPos = y;

@@ -22,6 +22,19 @@ int main(int argc, char** argv)
     start_color();
     clear();
     refresh();
+
+    ///////////HOME HUD/////////////////////
+	WINDOW* homeWin = newwin(LINES, COLS, 0, 0);
+	//wattron(newCard->win, COLOR_PAIR(5));
+	box(homeWin, 0, 0);
+	//wattroff(newCard->win, COLOR_PAIR(5));
+
+	//wbkgd(newCard->win, COLOR_PAIR(1));
+	wnoutrefresh(homeWin);
+	doupdate();
+    /////////////////////////////////////////
+
+
     //scrollok(win, TRUE);
     char * text;
     init_color(COLOR_RED, 245 * COLOR_OFFSET, 164 * COLOR_OFFSET, 71 * COLOR_OFFSET);
@@ -51,7 +64,7 @@ int main(int argc, char** argv)
     Card* card7 = cardCreate("      Ideas", "  + Add card (c)", 6 * CARD_WIDTH + 1, 1);
 
     Card* currentCard = card;
-
+    cardChangeColor(card, 3);
     Card* deck[7];
     deck[0] = card;
     deck[1] = card2;
@@ -106,12 +119,13 @@ int main(int argc, char** argv)
 	    case 'c':
 		echo();
 		text = (char*)malloc(200);
-		wmove(currentCard->win, currentCard->height + currentCard->yPos + 13, currentCard->xPos);
-		wgetnstr(currentCard->win, text, 100);
+		wmove(homeWin, LINES - 10, currentCard->xPos);
+		waddch(homeWin, '>');
+		wgetnstr(homeWin, text, 100);
 		printf("text: %s, size %ld", text, strlen(text));
 		cardAddImage(currentCard, text, strlen(text));
 		noecho();
-		erase();
+		werase(homeWin);
 		doupdate();
 		break;
 	    case 't':
@@ -134,7 +148,9 @@ int main(int argc, char** argv)
 	if(cardCounter == 7)
 		cardCounter = 0;
 
-	
+	mvwin(homeWin, 0, 0);
+	box(homeWin, 0, 0);
+	wnoutrefresh(homeWin);
     	for(int i = 0; i < 7; i++)
 		cardDraw(deck[i]);
 	
