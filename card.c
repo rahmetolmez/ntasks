@@ -11,7 +11,7 @@ Card* cardCreate(const char* title, const char* text, int x, int y)
     strcpy(newCard->title, title);
     strcpy(newCard->text, text);
   
-    newCard->img = imageCreate(x + 2, y + 2, "", 0);
+    //newCard->img = imageCreate(x + 2, y + 2, "", 0);
     //newCard->images[0] = imageCreate(x + 2, y + 2 + IMAGE_HEIGHT + 3);
     
     newCard->imageCount = 0;
@@ -50,7 +50,7 @@ void cardMove(Card* card, char direction, int distance)
     if(direction == 'd')
         card->xPos += distance;
 
-    imageMove(card->img, direction, distance);
+    //imageMove(card->img, direction, distance);
     
     for(int i = 0; i < card->imageCount; i++)
     	imageMove(card->images[i], direction, distance);
@@ -60,8 +60,13 @@ void cardMove(Card* card, char direction, int distance)
 
 void cardAddImage(Card* card, const char * text, int textLength)
 {
-	card->images[card->imageCount] = imageCreate(card->xPos + 2, card->yPos + 2 + (card->imageCount + 1) * IMAGE_HEIGHT + (3 * (card->imageCount + 1)), text, textLength);
+	card->images[card->imageCount] = imageCreate(card->xPos + 2, card->yPos + 2 + card->imageCount * IMAGE_HEIGHT + (3 * card->imageCount), text, textLength);
 	card->imageCount++;
+}
+
+void cardChangeColor(Card* card, int pair)
+{
+	wbkgd(card->win, COLOR_PAIR(pair));
 }
 
 void cardDraw(Card* card)
@@ -82,7 +87,7 @@ void cardDraw(Card* card)
     wnoutrefresh(card->win);
     //doupdate();
 
-    imageDraw(card->img);
+    //imageDraw(card->img);
     for(int i = 0; i < card->imageCount; i++)
     	imageDraw(card->images[i]);
 }

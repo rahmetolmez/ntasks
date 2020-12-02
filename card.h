@@ -26,5 +26,6 @@ Card* cardCreate(const char* title, const char* text, int x, int y);
 void cardDraw(Card* card);
 void cardMove(Card* card, char direction, int distance);
 void cardAddImage(Card* card, const char* text, int textLength);
+void cardChangeColor(Card* card, int pair);
 
 #endif

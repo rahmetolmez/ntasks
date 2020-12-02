@@ -12,7 +12,7 @@ const char * getString();
 
 int main(int argc, char** argv)
 {
-   
+
     win = initscr();
     curs_set(0);
     keypad(stdscr, 1);
@@ -35,7 +35,8 @@ int main(int argc, char** argv)
 
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
     init_pair(2, COLOR_BLACK, COLOR_BLACK);
-    init_pair(3, COLOR_CYAN, COLOR_CYAN);
+    init_pair(3, COLOR_BLACK, COLOR_CYAN);
+    init_pair(6, COLOR_BLACK, COLOR_GREEN);
     ///init_pair(4, COLOR_WHITE, COLOR_WHITE);
 
     //wbkgd(win, COLOR_PAIR(1));
@@ -67,7 +68,7 @@ int main(int argc, char** argv)
     			};
 
     //cardAddImage(card);
-    imageSet(card->img, whiteBg);
+    //imageSet(card->img, whiteBg);
     //imageSet(card->images[0], whiteBg);
 
     int cardCounter = 1;
@@ -75,12 +76,15 @@ int main(int argc, char** argv)
     int ch = 'n';
     while(ch != 'q')
     {
-        
+
 	if(ch != ERR)
+	{
+		cardChangeColor(card5, 6);
 		clear();
-	//erase();
+	}
+
         ch = getch();
-	
+
         switch(ch)
         {
             case 'w':
@@ -100,10 +104,15 @@ int main(int argc, char** argv)
                 cardMove(currentCard, 'd', currentCard->width);
                 break;
 	    case 'c':
+		echo();
 		text = (char*)malloc(200);
+		wmove(currentCard->win, currentCard->height + currentCard->yPos + 13, currentCard->xPos);
 		wgetnstr(currentCard->win, text, 100);
 		printf("text: %s, size %ld", text, strlen(text));
 		cardAddImage(currentCard, text, strlen(text));
+		noecho();
+		erase();
+		doupdate();
 		break;
 	    case 't':
 		//getstr(currentCard->images[0]->text);
@@ -111,7 +120,9 @@ int main(int argc, char** argv)
 		//wnoutrefresh(win);
 		break;
 	    case ' ':
+		cardChangeColor(currentCard, 1);
 		currentCard = deck[cardCounter];
+		cardChangeColor(currentCard, 3);
 		cardCounter++;
 		break;
             default:
@@ -143,7 +154,7 @@ int main(int argc, char** argv)
     delwin(card2->win);
     delwin(card3->win);
 
-    delwin(card->img->win);
+    //delwin(card->img->win);
 
 
 
