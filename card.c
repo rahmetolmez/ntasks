@@ -18,15 +18,15 @@ Card* cardCreate(const char* title, const char* text, int x, int y)
     newCard->xPos = x;
     newCard->yPos = y;
     newCard->width = CARD_WIDTH;
-    newCard->height = CARD_HEIGHT;
-
+    ///newCard->height = CARD_HEIGHT;
+    newCard->height = 6;//initial height
     /* Setting up card frame (window) */
     nodelay(newCard->win, 1); /* Not sure of this */
-    newCard->win = newwin(CARD_HEIGHT, CARD_WIDTH, newCard->yPos, newCard->xPos);
+    newCard->win = newwin(6, CARD_WIDTH, newCard->yPos, newCard->xPos);
 
-    wattron(newCard->win, COLOR_PAIR(5));
-    box(newCard->win, 0, 0);
-    wattroff(newCard->win, COLOR_PAIR(5));
+    ///wattron(newCard->win, COLOR_PAIR(5));
+    ///box(newCard->win, 0, 0);
+    ///wattroff(newCard->win, COLOR_PAIR(5));
 
     wbkgd(newCard->win, COLOR_PAIR(1));
 
@@ -60,10 +60,20 @@ void cardMove(Card* card, char direction, int distance)
 
 void cardAddImage(Card* card, const char * text, int textLength)
 {
+	erase();
+	wresize(card->win, card->height + (textLength / 18 + 2), card->width);
+	card->height = card->height + textLength / 18 + 2;
+	//wattron(card->win, COLOR_PAIR(5));
+    //box(card->win, 0, 0);
+    //wattroff(card->win, COLOR_PAIR(5));
+	//refresh();
+	wrefresh(stdscr);
+	wnoutrefresh(card->win);
+	//doupdate();
 	if(card->imageCount == 0)
-		card->images[card->imageCount] = imageCreate(card->xPos + 2, card->yPos + 3 + card->imageCount * (textLength / 17 + 1) + (1 * card->imageCount), text, textLength);
+		card->images[card->imageCount] = imageCreate(card->xPos + 1, card->yPos + 3 + card->imageCount * (textLength / 17 + 1) + (1 * card->imageCount), text, textLength);
 	else
-		card->images[card->imageCount] = imageCreate(card->xPos + 2, card->images[card->imageCount - 1]->yPos + card->images[card->imageCount - 1]->height + 1, text, textLength);
+		card->images[card->imageCount] = imageCreate(card->xPos + 1, card->images[card->imageCount - 1]->yPos + card->images[card->imageCount - 1]->height + 1, text, textLength);
 	card->imageCount++;
 }
 
@@ -81,7 +91,7 @@ void cardDraw(Card* card)
 
     //wattron(card->win, COLOR_PAIR(2));
     mvwprintw(card->win, 1, 1, card->title);
-    mvwprintw(card->win, CARD_HEIGHT - 3, 1, card->text);
+    //mvwprintw(card->win, card->height - 3, 1, card->text);
     //wattroff(card->win, COLOR_PAIR(2));
 
 

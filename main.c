@@ -32,6 +32,12 @@ int main(int argc, char** argv)
 	//wbkgd(newCard->win, COLOR_PAIR(1));
 	wnoutrefresh(homeWin);
 	doupdate();
+
+	///HEADER///
+	WINDOW* headerWin = newwin(3, COLS - 2, 1, 1);
+	//box(headerWin, 0, 0);
+	wnoutrefresh(headerWin);
+	doupdate();
     /////////////////////////////////////////
 
 
@@ -50,18 +56,21 @@ int main(int argc, char** argv)
     init_pair(2, COLOR_BLACK, COLOR_BLACK);
     init_pair(3, COLOR_BLACK, COLOR_CYAN);
     init_pair(6, COLOR_BLACK, COLOR_GREEN);
+    init_pair(7, COLOR_WHITE, COLOR_MAGENTA);
+    init_pair(8, COLOR_WHITE, COLOR_CYAN);
     ///init_pair(4, COLOR_WHITE, COLOR_WHITE);
 
-    //wbkgd(win, COLOR_PAIR(1));
+    wbkgd(homeWin, COLOR_PAIR(7));
+    wbkgd(headerWin, COLOR_PAIR(8));
 
-    Card* card = cardCreate("      Backlog", "  + Add card (c)", 1, 1);
-    Card* card2 = cardCreate("     To Do", "  + Add card (c)", CARD_WIDTH + 1, 1);
-    Card* card3 = cardCreate("   In Progress", "  + Add card (c)", 2 * CARD_WIDTH + 1, 1);
+    Card* card = cardCreate("      Backlog", "  + Add card (c)", 1, 5);
+    Card* card2 = cardCreate("      To Do", "  + Add card (c)", CARD_WIDTH + 2, 5);
+    Card* card3 = cardCreate("   In Progress", "  + Add card (c)", 2 * CARD_WIDTH + 3, 5);
 
-    Card* card4 = cardCreate(" Taking Too Long", "  + Add card (c)",3 * CARD_WIDTH + 1, 1);
-    Card* card5 = cardCreate("       Done", "  + Add card (c)", 4 * CARD_WIDTH + 1, 1);
-    Card* card6 = cardCreate("      Notes", "  + Add card (c)", 5 * CARD_WIDTH + 1, 1);
-    Card* card7 = cardCreate("      Ideas", "  + Add card (c)", 6 * CARD_WIDTH + 1, 1);
+    Card* card4 = cardCreate(" Taking Too Long", "  + Add card (c)",3 * CARD_WIDTH + 4, 5);
+    Card* card5 = cardCreate("       Done", "  + Add card (c)", 4 * CARD_WIDTH + 5, 5);
+    Card* card6 = cardCreate("      Notes", "  + Add card (c)", 5 * CARD_WIDTH + 6, 5);
+    Card* card7 = cardCreate("      Ideas", "  + Add card (c)", 6 * CARD_WIDTH + 7, 5);
 
     Card* currentCard = card;
     cardChangeColor(card, 3);
@@ -152,6 +161,9 @@ int main(int argc, char** argv)
 	mvwin(homeWin, 0, 0);
 	box(homeWin, 0, 0);
 	wnoutrefresh(homeWin);
+	mvwin(headerWin, 1, 1);
+	//box(headerWin, 0, 0);
+	wnoutrefresh(headerWin);
     	for(int i = 0; i < 7; i++)
 		cardDraw(deck[i]);
 	

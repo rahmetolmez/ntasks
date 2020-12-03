@@ -3,9 +3,9 @@
 
 #include<ncurses.h>
 
-#define IMAGE_WINDOW_WIDTH 16
+#define IMAGE_WINDOW_WIDTH 18
 #define IMAGE_WINDOW_HEIGHT 5
-#define IMAGE_WIDTH 14
+#define IMAGE_WIDTH 15
 #define IMAGE_HEIGHT 3
 
 #define BLACK 'b'
