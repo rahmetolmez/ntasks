@@ -10,12 +10,14 @@ Image* imageCreate(int x, int y, const char* text, int textLength)
 	newImage->text = (char*)malloc(sizeof(char) * newImage->textLength + 1);
 	//text[textLength - 1] = '\0';
 	strcpy(newImage->text, text);
+	newImage->width = IMAGE_WINDOW_WIDTH;
+	newImage->height = textLength / IMAGE_WINDOW_WIDTH + 1;
 	newImage->xPos = x;
     	newImage->yPos = y;
 
 	//printf("%s", newImage->text);
 	nodelay(newImage->win, 1); /* Not sure of this */
-    	newImage->win = newwin(IMAGE_WINDOW_HEIGHT, IMAGE_WINDOW_WIDTH, newImage->yPos, newImage->xPos);
+    	newImage->win = newwin(newImage->height, newImage->width, newImage->yPos, newImage->xPos);
     	//box(newImage->win, 0, 0);
 	//wbkgd(newImage->win, COLOR_PAIR(1));
 

@@ -15,9 +15,11 @@
 typedef struct Image
 {
 	WINDOW* win;
-	char img[IMAGE_HEIGHT][IMAGE_WIDTH];
+	char img[IMAGE_HEIGHT][IMAGE_WIDTH];//delete this?
 	char* text;
 	int textLength;
+	int width;
+	int height;
 	int xPos, yPos;
 
 }Image;

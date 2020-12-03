@@ -20,7 +20,7 @@ Card* cardCreate(const char* title, const char* text, int x, int y)
     newCard->width = CARD_WIDTH;
     newCard->height = CARD_HEIGHT;
 
-    /* Setting up card frame (window) */	    
+    /* Setting up card frame (window) */
     nodelay(newCard->win, 1); /* Not sure of this */
     newCard->win = newwin(CARD_HEIGHT, CARD_WIDTH, newCard->yPos, newCard->xPos);
 
@@ -34,7 +34,7 @@ Card* cardCreate(const char* title, const char* text, int x, int y)
     ///wrefresh(newCard->win);
     wnoutrefresh(newCard->win);
     doupdate();
- 
+
     return newCard;
 }
 
@@ -51,7 +51,7 @@ void cardMove(Card* card, char direction, int distance)
         card->xPos += distance;
 
     //imageMove(card->img, direction, distance);
-    
+
     for(int i = 0; i < card->imageCount; i++)
     	imageMove(card->images[i], direction, distance);
     //wrefresh(card->win); /* added here to avoid flickering*/
@@ -60,7 +60,10 @@ void cardMove(Card* card, char direction, int distance)
 
 void cardAddImage(Card* card, const char * text, int textLength)
 {
-	card->images[card->imageCount] = imageCreate(card->xPos + 2, card->yPos + 2 + card->imageCount * IMAGE_HEIGHT + (3 * card->imageCount), text, textLength);
+	if(card->imageCount == 0)
+		card->images[card->imageCount] = imageCreate(card->xPos + 2, card->yPos + 3 + card->imageCount * (textLength / 17 + 1) + (1 * card->imageCount), text, textLength);
+	else
+		card->images[card->imageCount] = imageCreate(card->xPos + 2, card->images[card->imageCount - 1]->yPos + card->images[card->imageCount - 1]->height + 1, text, textLength);
 	card->imageCount++;
 }
 

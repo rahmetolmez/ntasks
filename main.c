@@ -93,7 +93,8 @@ int main(int argc, char** argv)
 	if(ch != ERR)
 	{
 		cardChangeColor(card5, 6);
-		clear();
+		//clear();
+		erase();
 	}
 
         ch = getch();
