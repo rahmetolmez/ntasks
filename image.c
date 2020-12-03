@@ -23,7 +23,7 @@ Image* imageCreate(int x, int y, const char* text, int textLength)
 
     	///refresh();
     	///wrefresh(newImage->win);
-	wprintw(newImage->win, newImage->text);
+	mvwprintw(newImage->win, 0, 1, newImage->text);//why not in imageDraw??
 	wnoutrefresh(newImage->win);
  
     	return newImage;

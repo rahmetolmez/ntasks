@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     ///////////HOME HUD/////////////////////
 	WINDOW* homeWin = newwin(LINES, COLS, 0, 0);
 	//wattron(newCard->win, COLOR_PAIR(5));
-	box(homeWin, 0, 0);
+	//box(homeWin, 0, 0);
 	//wattroff(newCard->win, COLOR_PAIR(5));
 
 	//wbkgd(newCard->win, COLOR_PAIR(1));
@@ -132,7 +132,7 @@ int main(int argc, char** argv)
 		wmove(homeWin, LINES - 10, currentCard->xPos);
 		waddch(homeWin, '>');
 		wgetnstr(homeWin, text, 100);
-		printf("text: %s, size %ld", text, strlen(text));
+		//printf("text: %s, size %ld", text, strlen(text));
 		cardAddImage(currentCard, text, strlen(text));
 		noecho();
 		werase(homeWin);
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
 		cardCounter = 0;
 
 	mvwin(homeWin, 0, 0);
-	box(homeWin, 0, 0);
+	//box(homeWin, 0, 0);
 	wnoutrefresh(homeWin);
 	mvwin(headerWin, 1, 1);
 	//box(headerWin, 0, 0);
@@ -176,7 +176,7 @@ int main(int argc, char** argv)
 	//cardDraw(card5);
 	//cardDraw(card6);
 	//cardDraw(card7);
-        usleep(1900);
+        usleep(2000);
     }
 
     delwin(card->win);
