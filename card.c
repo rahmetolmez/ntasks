@@ -1,46 +1,75 @@
+/*REFACTOR TO CARD */
 #include"card.h"
-#include<string.h>
 #include<stdlib.h>
+#include<string.h>
 
-Card* cardCreate(const char* title, const char* text, int x, int y)
+Card* cardCreate(int x, int y, const char* text, int textLength)
 {
-    Card* newCard = (Card*)malloc(sizeof(Card));
+	Card* newCard = (Card*)malloc(sizeof(Card));
+	newCard->textLength = textLength;
+	newCard->text = (char*)malloc(sizeof(char) * newCard->textLength + 1);
+	//text[textLength - 1] = '\0';
+	strcpy(newCard->text, text);
+	newCard->width = CARD_WINDOW_WIDTH;
+	newCard->height = textLength / CARD_WINDOW_WIDTH + 1;
+	newCard->xPos = x;
+    	newCard->yPos = y;
 
-    newCard->title = (char*)malloc(sizeof(char) * TITLE_LENGTH);
-    newCard->text = (char*)malloc(sizeof(char) * TEXT_LENGTH);
-    strcpy(newCard->title, title);
-    strcpy(newCard->text, text);
+	//printf("%s", newCard->text);
+	nodelay(newCard->win, 1); /* Not sure of this */
+    	newCard->win = newwin(newCard->height, newCard->width, newCard->yPos, newCard->xPos);
+    	//box(newCard->win, 0, 0);
+	//wbkgd(newCard->win, COLOR_PAIR(1));
 
-    //newCard->img = imageCreate(x + 2, y + 2, "", 0);
-    //newCard->images[0] = imageCreate(x + 2, y + 2 + IMAGE_HEIGHT + 3);
+    	///refresh();
+    	///wrefresh(newCard->win);
+	mvwprintw(newCard->win, 0, 1, newCard->text);//why not in cardDraw??
+	wnoutrefresh(newCard->win);
+ 
+    	return newCard;
+}
 
-    newCard->imageCount = 0;
-    newCard->xPos = x;
-    newCard->yPos = y;
-    newCard->width = CARD_WIDTH;
-    ///newCard->height = CARD_HEIGHT;
-    newCard->height = 6;//initial height
-    /* Setting up card frame (window) */
-    nodelay(newCard->win, 1); /* Not sure of this */
-    newCard->win = newwin(6, CARD_WIDTH, newCard->yPos, newCard->xPos);
-
-    ///wattron(newCard->win, COLOR_PAIR(5));
-    ///box(newCard->win, 0, 0);
-    ///wattroff(newCard->win, COLOR_PAIR(5));
-
-    wbkgd(newCard->win, COLOR_PAIR(1));
-
-    //refresh();
-    ///wrefresh(newCard->win);
-    wnoutrefresh(newCard->win);
-    doupdate();
-
-    return newCard;
+void cardDraw(Card* card)
+{
+    int i, j;
+    /*for(i = 0; i < CARD_HEIGHT; i++)
+    {
+    	for(j = 0; j < CARD_WIDTH; j++)
+	{
+		if(card->img[i][j] == CYAN)
+		{
+			wattron(card->win, COLOR_PAIR(3));
+			mvwaddch(card->win, i + 1, j + 1, card->img[i][j]);
+			wattroff(card->win, COLOR_PAIR(3));
+		}
+		if(card->img[i][j] == BLACK)
+		{
+			wattron(card->win, COLOR_PAIR(2));
+			mvwaddch(card->win, i + 1, j + 1, card->img[i][j]);
+			wattroff(card->win, COLOR_PAIR(2));
+		}
+		if(card->img[i][j] == WHITE)
+		{
+			wattron(card->win, COLOR_PAIR(4));
+			mvwaddch(card->win, i + 1, j + 1, card->img[i][j]);
+			wattroff(card->win, COLOR_PAIR(4));
+		}
+		/*wattron(card->win, COLOR_PAIR(2));
+		mvwaddch(card->win, i + 1, j + 1, card->img[i][j]);
+		wattroff(card->win, COLOR_PAIR(2));
+	}
+	
+    }*/
+    wbkgd(card->win, COLOR_PAIR(4));
+    mvwin(card->win, card->yPos, card->xPos);
+    ///wrefresh(card->win);
+    //wprintw(card->win, card->text);
+    wnoutrefresh(card->win);
+    //doupdate();
 }
 
 void cardMove(Card* card, char direction, int distance)
 {
-    //erase(); /* added here to avoid flickering*/
     if(direction == 'w')
         card->yPos -= distance;
     if(direction == 'a')
@@ -49,58 +78,17 @@ void cardMove(Card* card, char direction, int distance)
         card->yPos += distance;
     if(direction == 'd')
         card->xPos += distance;
-
-    //imageMove(card->img, direction, distance);
-
-    for(int i = 0; i < card->imageCount; i++)
-    	imageMove(card->images[i], direction, distance);
-    //wrefresh(card->win); /* added here to avoid flickering*/
-
 }
 
-void cardAddImage(Card* card, const char * text, int textLength)
+void cardSet(Card* card, char img[CARD_HEIGHT][CARD_WIDTH])
 {
-	erase();
-	wresize(card->win, card->height + (textLength / 18 + 2), card->width);
-	card->height = card->height + textLength / 18 + 2;
-	//wattron(card->win, COLOR_PAIR(5));
-    //box(card->win, 0, 0);
-    //wattroff(card->win, COLOR_PAIR(5));
-	//refresh();
-	wrefresh(stdscr);
-	wnoutrefresh(card->win);
-	//doupdate();
-	if(card->imageCount == 0)
-		card->images[card->imageCount] = imageCreate(card->xPos + 1, card->yPos + 3 + card->imageCount * (textLength / 17 + 1) + (1 * card->imageCount), text, textLength);
-	else
-		card->images[card->imageCount] = imageCreate(card->xPos + 1, card->images[card->imageCount - 1]->yPos + card->images[card->imageCount - 1]->height + 1, text, textLength);
-	card->imageCount++;
+	int i, j;
+	for(i = 0; i < CARD_HEIGHT; i++)
+	{
+		for(j = 0; j < CARD_WIDTH; j++)
+		{
+			card->img[i][j] = img[i][j];
+		}
+	}
 }
 
-void cardChangeColor(Card* card, int pair)
-{
-	wbkgd(card->win, COLOR_PAIR(pair));
-}
-
-void cardDraw(Card* card)
-{
-    /*card->win = newwin(CARD_HEIGHT, CARD_WIDTH, card->yPos, card->xPos);
-    box(card->win, 0, 0);
-    //refresh();
-    wrefresh(card->win);*/
-
-    //wattron(card->win, COLOR_PAIR(2));
-    mvwprintw(card->win, 1, 1, card->title);
-    //mvwprintw(card->win, card->height - 3, 1, card->text);
-    //wattroff(card->win, COLOR_PAIR(2));
-
-
-    mvwin(card->win, card->yPos, card->xPos);
-    //wrefresh(card->win);
-    wnoutrefresh(card->win);
-    //doupdate();
-
-    //imageDraw(card->img);
-    for(int i = 0; i < card->imageCount; i++)
-    	imageDraw(card->images[i]);
-}
