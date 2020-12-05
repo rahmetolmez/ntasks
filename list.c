@@ -13,7 +13,7 @@ List* listCreate(const char* title, const char* text, int x, int y)
 
     //newList->img = cardCreate(x + 2, y + 2, "", 0);
     //newList->cards[0] = cardCreate(x + 2, y + 2 + CARD_HEIGHT + 3);
-
+    //newList->selectedCard = 0;
     newList->cardCount = 0;
     newList->xPos = x;
     newList->yPos = y;
@@ -22,7 +22,9 @@ List* listCreate(const char* title, const char* text, int x, int y)
     newList->height = 6;//initial height
     /* Setting up list frame (window) */
     nodelay(newList->win, 1); /* Not sure of this */
+
     newList->win = newwin(6, LIST_WIDTH, newList->yPos, newList->xPos);
+
 
     ///wattron(newList->win, COLOR_PAIR(5));
     ///box(newList->win, 0, 0);
@@ -77,9 +79,26 @@ void listAddCard(List* list, const char * text, int textLength)
 	list->cardCount++;
 }
 
+int listRemoveCard(List* list, int cardIndex)
+{
+    if(list->cardCount <= 0 || cardIndex < 0)
+        return -1;
+
+    wresize(list->win, list->height - list->cards[cardIndex]->height, list->width);
+    delwin(list->cards[cardIndex]->win);
+    list->cardCount--;
+    list->cards[cardIndex] = NULL;
+    return 0;
+}
+
 void listChangeColor(List* list, int pair)
 {
 	wbkgd(list->win, COLOR_PAIR(pair));
+}
+
+void listChangeCardColor(List* list, int index, int pair)
+{
+    wbkgd(list->cards[index]->win, COLOR_PAIR(pair));
 }
 
 void listDraw(List* list)
@@ -90,11 +109,12 @@ void listDraw(List* list)
     wrefresh(list->win);*/
 
     //wattron(list->win, COLOR_PAIR(2));
+    //wattrset(list->win, A_BLINK);
     mvwprintw(list->win, 1, 1, list->title);
     //mvwprintw(list->win, list->height - 3, 1, list->text);
     //wattroff(list->win, COLOR_PAIR(2));
 
-
+    //wborder(list->win, '-', '-', '~', ' ', 'o', 'o', 'o', 'o');
     mvwin(list->win, list->yPos, list->xPos);
     //wrefresh(list->win);
     wnoutrefresh(list->win);

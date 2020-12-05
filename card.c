@@ -19,7 +19,7 @@ Card* cardCreate(int x, int y, const char* text, int textLength)
 	nodelay(newCard->win, 1); /* Not sure of this */
     	newCard->win = newwin(newCard->height, newCard->width, newCard->yPos, newCard->xPos);
     	//box(newCard->win, 0, 0);
-	//wbkgd(newCard->win, COLOR_PAIR(1));
+	wbkgd(newCard->win, COLOR_PAIR(4));
 
     	///refresh();
     	///wrefresh(newCard->win);
@@ -60,7 +60,7 @@ void cardDraw(Card* card)
 	}
 	
     }*/
-    wbkgd(card->win, COLOR_PAIR(4));
+    //wbkgd(card->win, COLOR_PAIR(4));
     mvwin(card->win, card->yPos, card->xPos);
     ///wrefresh(card->win);
     //wprintw(card->win, card->text);

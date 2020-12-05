@@ -8,7 +8,7 @@
 #define COLOR_OFFSET 3.92
 
 WINDOW* win;
-const char * getString();
+int changeListOfCard(List* from, int cardIndex, List* to);
 
 int main(int argc, char** argv)
 {
@@ -24,7 +24,8 @@ int main(int argc, char** argv)
     refresh();
 
     ///////////HOME HUD/////////////////////
-	WINDOW* homeWin = newwin(LINES, COLS, 0, 0);
+	WINDOW* homeWin = newwin(LINES, COLS, 0 + 3, 0);
+    scrollok(homeWin, TRUE);
 	//wattron(newList->win, COLOR_PAIR(5));
 	//box(homeWin, 0, 0);
 	//wattroff(newList->win, COLOR_PAIR(5));
@@ -35,7 +36,11 @@ int main(int argc, char** argv)
 
 	///HEADER///
 	WINDOW* headerWin = newwin(3, COLS - 2, 1, 1);
+    //wborder(headerWin, '|', '|', '-', '-', '-', '-', '-', '-');
 	//box(headerWin, 0, 0);
+    wattrset(headerWin, A_BOLD);
+    mvwprintw(headerWin, 1, (COLS - 2) / 2 - 6, "nTasks");
+    //mvwprintw(headerWin, 1, COLS - 21, "tribow company (c)");
 	wnoutrefresh(headerWin);
 	doupdate();
     /////////////////////////////////////////
@@ -44,14 +49,15 @@ int main(int argc, char** argv)
     //scrollok(win, TRUE);
     char * text;
     init_color(COLOR_RED, 245 * COLOR_OFFSET, 164 * COLOR_OFFSET, 71 * COLOR_OFFSET);
+    init_color(COLOR_MAGENTA, 1000 * 89 / 255, 1000 * 4 / 255, 1000 * 68 / 255);
+    
     if(can_change_color() && COLORS >= 16)
-	init_color(15, 1000, 1000, 1000);
+	   init_color(15, 1000, 1000, 1000);
     if(COLORS >= 16){
-	init_pair(4, COLOR_BLACK, 15);
+	   init_pair(4, COLOR_BLACK, 15);
     }
     else
 	init_pair(4, COLOR_BLACK, COLOR_WHITE);
-
     init_pair(1, COLOR_BLACK, COLOR_WHITE);
     init_pair(2, COLOR_BLACK, COLOR_BLACK);
     init_pair(3, COLOR_BLACK, COLOR_CYAN);
@@ -61,7 +67,11 @@ int main(int argc, char** argv)
     ///init_pair(4, COLOR_WHITE, COLOR_WHITE);
 
     wbkgd(homeWin, COLOR_PAIR(7));
+    
+    init_color(COLOR_CYAN, 1000 * 219 / 255, 1000 * 117 / 255, 1000 * 0 / 255);
     wbkgd(headerWin, COLOR_PAIR(8));
+    //printf("%d - %d\n", COLORS, COLOR_PAIRS);
+    //init_color(COLOR_CYAN, 1000 * 63 / 255, 1000 * 94 / 255, 1000 * 145 / 255);
 
     List* list = listCreate("      Backlog", "  + Add list (c)", 1, 5);
     List* list2 = listCreate("      To Do", "  + Add list (c)", LIST_WIDTH + 2, 5);
@@ -82,7 +92,7 @@ int main(int argc, char** argv)
     deck[4] = list5;
     deck[5] = list6;
     deck[6] = list7;
-
+    int deckSize = 7;
     char whiteBg[3][14] = {
 	    		{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
    			{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
@@ -94,7 +104,8 @@ int main(int argc, char** argv)
     //cardSet(list->cards[0], whiteBg);
 
     int listCounter = 1;
-
+    int selectedCard = -1;
+    int listNum = 0;
     int ch = 'n';
     while(ch != 'q')
     {
@@ -127,36 +138,66 @@ int main(int argc, char** argv)
                 listMove(currentList, 'd', currentList->width);
                 break;
 	    case 'c':
-		echo();
-		text = (char*)malloc(200);
-		wmove(homeWin, LINES - 10, currentList->xPos);
-		waddch(homeWin, '>');
-		wgetnstr(homeWin, text, 100);
-		//printf("text: %s, size %ld", text, strlen(text));
-		listAddCard(currentList, text, strlen(text));
-		noecho();
-		werase(homeWin);
-		doupdate();
-		break;
+		  echo();
+		  text = (char*)malloc(200);
+		  wmove(homeWin, LINES - 10, currentList->xPos);
+		  waddch(homeWin, '>');
+		  wgetnstr(homeWin, text, 100);
+		  //printf("text: %s, size %ld", text, strlen(text));
+		  listAddCard(currentList, text, strlen(text));
+		  noecho();
+		  werase(homeWin);
+		  doupdate();
+		  break;
 	    case 't':
 		//getstr(currentList->cards[0]->text);
 		//mvprintw(0, 39, "%s", currentList->cards[0]->text);
 		//wnoutrefresh(win);
-		break;
+		  break;
 	    case ' ':
-		listChangeColor(currentList, 1);
-		currentList = deck[listCounter];
-		listChangeColor(currentList, 3);
-		listCounter++;
-		break;
-            default:
-                break;
+		  listChangeColor(currentList, 1);
+          if(selectedCard > -1)
+            listChangeCardColor(currentList, selectedCard, 4);
+		  currentList = deck[listCounter];
+		  listChangeColor(currentList, 3);
+		  listCounter++;
+          selectedCard = -1;
+		  break;
+        case '\t':
+            if(currentList->cardCount > 0)
+            {
+                if(selectedCard > -1)
+                    listChangeCardColor(currentList, selectedCard, 4);
+                selectedCard++;
+                selectedCard %= currentList->cardCount;
+                listChangeCardColor(currentList, selectedCard, 1);
+            }
+            break;
+        case 'u':
+            echo();
+            wmove(homeWin, LINES - 10, currentList->xPos);
+            waddch(homeWin, '>');
+            listNum = wgetch(homeWin);
+            noecho();
+            werase(homeWin);
+            doupdate();
+            listNum %= deckSize;
+            if(changeListOfCard(currentList, selectedCard, deck[listNum]) == 0)
+            {
+                selectedCard -= 1;
+                //currentList = deck[listNum];
+                //selectedCard = currentList->cardCount - 1;
+            }
+        default:
+            break;
 
 	    
         }
 	
 	if(listCounter == 7)
 		listCounter = 0;
+    //if(selectedCard == currentList->cardCount)
+    //    selectedCard = 0;
 
 	mvwin(homeWin, 0, 0);
 	//box(homeWin, 0, 0);
@@ -179,6 +220,7 @@ int main(int argc, char** argv)
         usleep(2000);
     }
 
+    //todo: do all freeing
     delwin(list->win);
     delwin(list2->win);
     delwin(list3->win);
@@ -192,32 +234,13 @@ int main(int argc, char** argv)
     return 0;
 }
 
-const char * getString()
+int changeListOfCard(List* from, int cardIndex, List* to)
 {
-    char* input = (char*)malloc(sizeof(char) * 200);
-
-    // let the terminal do the line editing
-    nocbreak();
-    echo();
-
-    // this reads from buffer after <ENTER>, not "raw" 
-    // so any backspacing etc. has already been taken care of
-    int ch = getch();
-    input[0] = '\0';
-    char chr = (char)ch;
-    int i = 0;
-    while ( ch != '\n' )
-    {
-	strncat(input, &chr, i + 1);
-	input[i + 1] = '\0';
-        //input[i] = ch;
-        ch = getch();
-	chr = (char)ch;
-	i++;
-    }
-
-    // restore your cbreak / echo settings here
-    printf("%s", input);
-    printf("helllo");
-    return input;
+    if(from->cardCount <= 0 || cardIndex < 0 || (from == to))
+        return -1;
+    listAddCard(to, from->cards[cardIndex]->text, strlen(from->cards[cardIndex]->text));
+    listRemoveCard(from, cardIndex);
+    //werase(win);
+    //doupdate();
+    return 0;
 }
