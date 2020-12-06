@@ -13,7 +13,7 @@ Card* cardCreate(int x, int y, const char* text, int textLength)
 	newCard->width = CARD_WINDOW_WIDTH;
 	newCard->height = textLength / CARD_WINDOW_WIDTH + 1;
 	newCard->xPos = x;
-    	newCard->yPos = y;
+    newCard->yPos = y;
 
 	//printf("%s", newCard->text);
 	nodelay(newCard->win, 1); /* Not sure of this */

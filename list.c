@@ -19,11 +19,11 @@ List* listCreate(const char* title, const char* text, int x, int y)
     newList->yPos = y;
     newList->width = LIST_WIDTH;
     ///newList->height = LIST_HEIGHT;
-    newList->height = 6;//initial height
+    newList->height = LIST_HEIGHT;//initial height
     /* Setting up list frame (window) */
     nodelay(newList->win, 1); /* Not sure of this */
 
-    newList->win = newwin(6, LIST_WIDTH, newList->yPos, newList->xPos);
+    newList->win = newwin(LIST_HEIGHT, LIST_WIDTH, newList->yPos, newList->xPos);
 
 
     ///wattron(newList->win, COLOR_PAIR(5));
@@ -76,7 +76,8 @@ void listAddCard(List* list, const char * text, int textLength)
 		list->cards[list->cardCount] = cardCreate(list->xPos + 1, list->yPos + 3 + list->cardCount * (textLength / 17 + 1) + (1 * list->cardCount), text, textLength);
 	else
 		list->cards[list->cardCount] = cardCreate(list->xPos + 1, list->cards[list->cardCount - 1]->yPos + list->cards[list->cardCount - 1]->height + 1, text, textLength);
-	list->cardCount++;
+	
+    list->cardCount++;
 }
 
 int listRemoveCard(List* list, int cardIndex)
@@ -84,10 +85,36 @@ int listRemoveCard(List* list, int cardIndex)
     if(list->cardCount <= 0 || cardIndex < 0)
         return -1;
 
-    wresize(list->win, list->height - list->cards[cardIndex]->height, list->width);
+    for(int i = list->cardCount - 1; i > cardIndex; i--)
+        list->cards[i]->yPos = list->cards[i - 1]->yPos;
+
+    //Resizing list height
+    erase();
+    list->height = list->height - (list->cards[cardIndex]->textLength / 18 + 2);
+    wresize(list->win, list->height, list->width);
+    //wrefresh(stdscr);
+    wnoutrefresh(list->win);
+
+
     delwin(list->cards[cardIndex]->win);
     list->cardCount--;
+
+
+    //int yY = list->cards[cardIndex]->yPos;
+    //int lH = list->cards[cardIndex]->height;
     list->cards[cardIndex] = NULL;
+
+    int nY = 0;
+    //if(cardIndex + 1 < list->cardCount)
+        //list->cards[cardIndex + 1]->yPos = yY;
+    //shift the cards to avoid null card and move cards one tile up
+    for(int i = cardIndex; i < list->cardCount; i++)
+    {
+        //nY = list->cards[i + 1]->yPos;
+        list->cards[i] = list->cards[i + 1];
+        //list->cards[i]->yPos = nY;
+    }
+
     return 0;
 }
 

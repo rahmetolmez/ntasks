@@ -3,3 +3,6 @@ all:
 
 run:
 	./main
+
+dbg:
+	gdb ./main

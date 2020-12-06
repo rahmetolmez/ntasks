@@ -123,19 +123,19 @@ int main(int argc, char** argv)
         {
             case 'w':
 	    case KEY_UP:
-                listMove(currentList, 'w', currentList->height / 2);
+                listMove(currentList, 'w', 5);
                 break;
             case 'a':
 	    case KEY_LEFT:
-                listMove(currentList, 'a', currentList->width);
+                listMove(currentList, 'a', 10);
                 break;
             case 's':
 	    case KEY_DOWN:
-                listMove(currentList, 's', currentList->height / 2);
+                listMove(currentList, 's', 5);
                 break;
             case 'd':
 	    case KEY_RIGHT:
-                listMove(currentList, 'd', currentList->width);
+                listMove(currentList, 'd', 10);
                 break;
 	    case 'c':
 		  echo();
@@ -170,7 +170,7 @@ int main(int argc, char** argv)
                     listChangeCardColor(currentList, selectedCard, 4);
                 selectedCard++;
                 selectedCard %= currentList->cardCount;
-                listChangeCardColor(currentList, selectedCard, 1);
+                listChangeCardColor(currentList, selectedCard, 7);
             }
             break;
         case 'u':
@@ -205,7 +205,7 @@ int main(int argc, char** argv)
 	mvwin(headerWin, 1, 1);
 	//box(headerWin, 0, 0);
 	wnoutrefresh(headerWin);
-    	for(int i = 0; i < 7; i++)
+    for(int i = 0; i < 7; i++)
 		listDraw(deck[i]);
 	
 	doupdate();
