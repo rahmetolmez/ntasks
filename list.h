@@ -9,6 +9,7 @@
 #define TITLE_LENGTH 32
 #define TEXT_LENGTH 128
 
+
 typedef struct List
 {
     WINDOW* win;

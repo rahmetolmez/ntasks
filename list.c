@@ -1,4 +1,5 @@
 #include"list.h"
+#include"card.h"
 #include<string.h>
 #include<stdlib.h>
 
@@ -63,8 +64,8 @@ void listMove(List* list, char direction, int distance)
 void listAddCard(List* list, const char * text, int textLength)
 {
 	erase();
-	wresize(list->win, list->height + (textLength / 18 + 2), list->width);
-	list->height = list->height + textLength / 18 + 2;
+	wresize(list->win, list->height + (textLength / CARD_LINE_LENGTH + 2), list->width);
+	list->height = list->height + textLength / CARD_LINE_LENGTH + 2;
 	//wattron(list->win, COLOR_PAIR(5));
     //box(list->win, 0, 0);
     //wattroff(list->win, COLOR_PAIR(5));
@@ -90,7 +91,7 @@ int listRemoveCard(List* list, int cardIndex)
 
     //Resizing list height
     erase();
-    list->height = list->height - (list->cards[cardIndex]->textLength / 18 + 2);
+    list->height = list->height - (list->cards[cardIndex]->textLength / CARD_LINE_LENGTH + 2);
     wresize(list->win, list->height, list->width);
     //wrefresh(stdscr);
     wnoutrefresh(list->win);

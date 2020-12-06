@@ -137,6 +137,14 @@ int main(int argc, char** argv)
 	    case KEY_RIGHT:
                 listMove(currentList, 'd', 10);
                 break;
+        case 'h':
+            for(int i = 0; i < deckSize; i++)
+                listMove(deck[i], 'a', 10);
+            break;
+        case 'l':
+            for(int i = 0; i < deckSize; i++)
+                listMove(deck[i], 'd', 10);
+            break;
 	    case 'c':
 		  echo();
 		  text = (char*)malloc(200);

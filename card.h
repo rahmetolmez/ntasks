@@ -7,7 +7,7 @@
 #define CARD_WINDOW_HEIGHT 5
 #define CARD_WIDTH 15
 #define CARD_HEIGHT 3
-
+#define CARD_LINE_LENGTH 18
 #define BLACK 'b'
 #define CYAN 'c'
 #define WHITE 'w'

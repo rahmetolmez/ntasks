@@ -13,4 +13,6 @@ typedef struct Board
 	int bgColor, hdrColor;
 }
 
+void boardDraw(Board* board);
+
 #endif
