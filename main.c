@@ -93,11 +93,11 @@ int main(int argc, char** argv)
     deck[5] = list6;
     deck[6] = list7;
     int deckSize = 7;
-    char whiteBg[3][14] = {
+    /*char whiteBg[3][14] = {
 	    		{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
    			{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'},
 			{'c', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'}
-    			};
+    			};*/
 
     //listAddCard(list);
     //cardSet(list->img, whiteBg);
@@ -109,96 +109,89 @@ int main(int argc, char** argv)
     int ch = 'n';
     while(ch != 'q')
     {
-
-	if(ch != ERR)
-	{
-		listChangeColor(list5, 6);
-		//clear();
-		erase();
-	}
-
+        if(ch != ERR)
+        {
+            listChangeColor(list5, 6);
+            erase();
+        }
         ch = getch();
-
+    
         switch(ch)
         {
             case 'w':
-	    case KEY_UP:
+            case KEY_UP:
                 listMove(currentList, 'w', 5);
                 break;
             case 'a':
-	    case KEY_LEFT:
+            case KEY_LEFT:
                 listMove(currentList, 'a', 10);
                 break;
             case 's':
-	    case KEY_DOWN:
+            case KEY_DOWN:
                 listMove(currentList, 's', 5);
                 break;
             case 'd':
-	    case KEY_RIGHT:
+            case KEY_RIGHT:
                 listMove(currentList, 'd', 10);
                 break;
-        case 'h':
-            for(int i = 0; i < deckSize; i++)
-                listMove(deck[i], 'a', 10);
-            break;
-        case 'l':
-            for(int i = 0; i < deckSize; i++)
-                listMove(deck[i], 'd', 10);
-            break;
-	    case 'c':
-		  echo();
-		  text = (char*)malloc(200);
-		  wmove(homeWin, LINES - 10, currentList->xPos);
-		  waddch(homeWin, '>');
-		  wgetnstr(homeWin, text, 100);
-		  //printf("text: %s, size %ld", text, strlen(text));
-		  listAddCard(currentList, text, strlen(text));
-		  noecho();
-		  werase(homeWin);
-		  doupdate();
-		  break;
-	    case 't':
-		//getstr(currentList->cards[0]->text);
-		//mvprintw(0, 39, "%s", currentList->cards[0]->text);
-		//wnoutrefresh(win);
-		  break;
-	    case ' ':
-		  listChangeColor(currentList, 1);
-          if(selectedCard > -1)
-            listChangeCardColor(currentList, selectedCard, 4);
-		  currentList = deck[listCounter];
-		  listChangeColor(currentList, 3);
-		  listCounter++;
-          selectedCard = -1;
-		  break;
-        case '\t':
-            if(currentList->cardCount > 0)
-            {
+            case 'h':
+                for(int i = 0; i < deckSize; i++)
+                    listMove(deck[i], 'a', 10);
+                break;
+            case 'l':
+                for(int i = 0; i < deckSize; i++)
+                    listMove(deck[i], 'd', 10);
+                break;
+            case 'c':
+                echo();
+                text = (char*)malloc(200);
+                wmove(homeWin, LINES - 10, currentList->xPos);
+                waddch(homeWin, '>');
+                wgetnstr(homeWin, text, 100);
+                //printf("text: %s, size %ld", text, strlen(text));
+                listAddCard(currentList, text, strlen(text));
+                noecho();
+                werase(homeWin);
+                doupdate();
+                break;
+            case ' ':
+                listChangeColor(currentList, 1);
                 if(selectedCard > -1)
                     listChangeCardColor(currentList, selectedCard, 4);
-                selectedCard++;
-                selectedCard %= currentList->cardCount;
-                listChangeCardColor(currentList, selectedCard, 7);
-            }
-            break;
-        case 'u':
-            echo();
-            wmove(homeWin, LINES - 10, currentList->xPos);
-            waddch(homeWin, '>');
-            listNum = wgetch(homeWin);
-            noecho();
-            werase(homeWin);
-            doupdate();
-            listNum %= deckSize;
-            if(changeListOfCard(currentList, selectedCard, deck[listNum]) == 0)
-            {
-                selectedCard -= 1;
-                //currentList = deck[listNum];
-                //selectedCard = currentList->cardCount - 1;
-            }
-        default:
-            break;
-
+                currentList = deck[listCounter];
+                listChangeColor(currentList, 3);
+                listCounter++;
+                selectedCard = -1;
+                break;
+            case '\t':
+                if(currentList->cardCount > 0)
+                {
+                    if(selectedCard > -1)
+                        listChangeCardColor(currentList, selectedCard, 4);
+                    selectedCard++;
+                    selectedCard %= currentList->cardCount;
+                    listChangeCardColor(currentList, selectedCard, 7);
+                }
+                break;
+            case 'u':
+                echo();
+                wmove(homeWin, LINES - 10, currentList->xPos);
+                waddch(homeWin, '>');
+                listNum = wgetch(homeWin);
+                noecho();
+                werase(homeWin);
+                doupdate();
+                listNum %= deckSize;
+                if(changeListOfCard(currentList, selectedCard, deck[listNum]) == 0)
+                {
+                    selectedCard -= 1;
+                    //currentList = deck[listNum];
+                    //selectedCard = currentList->cardCount - 1;
+                }
+                break;
+            default:
+                break;
+    
 	    
         }
 	
@@ -217,14 +210,7 @@ int main(int argc, char** argv)
 		listDraw(deck[i]);
 	
 	doupdate();
-	//listDraw(list);
-       	//listDraw(list2);
-        //listDraw(list3);
 
-	//listDraw(list4);
-	//listDraw(list5);
-	//listDraw(list6);
-	//listDraw(list7);
         usleep(2000);
     }
 

@@ -1,4 +1,3 @@
-/*REFACTOR TO CARD */
 #include"card.h"
 #include<stdlib.h>
 #include<string.h>
@@ -16,14 +15,14 @@ Card* cardCreate(int x, int y, const char* text, int textLength)
     newCard->yPos = y;
 
 	nodelay(newCard->win, 1); /* Not sure of this */
-    	newCard->win = newwin(newCard->height, newCard->width, newCard->yPos, newCard->xPos);
-    	//box(newCard->win, 0, 0);
+    newCard->win = newwin(newCard->height, newCard->width, newCard->yPos, newCard->xPos);
+
 	wbkgd(newCard->win, COLOR_PAIR(4));
 
 	mvwprintw(newCard->win, 0, 1, newCard->text);//why not in cardDraw??
 	wnoutrefresh(newCard->win);
  
-    	return newCard;
+    return newCard;
 }
 
 void cardDraw(Card* card)
