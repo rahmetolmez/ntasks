@@ -15,7 +15,6 @@
 typedef struct Card
 {
 	WINDOW* win;
-	char img[CARD_HEIGHT][CARD_WIDTH];//delete this?
 	char* text;
 	int textLength;
 	int width;
@@ -27,6 +26,5 @@ typedef struct Card
 Card* cardCreate(int x, int y, const char* text, int textLength);
 void cardDraw(Card* card);
 void cardMove(Card* card, char direction, int distance);
-void cardSet(Card* card, char img[CARD_HEIGHT][CARD_WIDTH]);
 
 #endif

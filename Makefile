@@ -1,5 +1,5 @@
 all:
-	gcc -o main main.c list.c card.c -lncurses -g
+	gcc -o main main.c board.c list.c card.c -lncurses -g
 
 run:
 	./main
