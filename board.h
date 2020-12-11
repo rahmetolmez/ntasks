@@ -32,5 +32,6 @@ void boardChangeColor(Board* board, int bgPair, int hdrPair);
 void boardChangeListColor(Board* board, int index, int pair);
 void boardChangeCardColor(Board* board, int listIndex, int cardIndex, int pair);
 int boardChangeListOfCard(List* from, int cardIndex, List* to);
-
+//board list move!
+//board delete
 #endif
