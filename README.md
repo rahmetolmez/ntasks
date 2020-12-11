@@ -1,5 +1,5 @@
 # ntasks
-A CLI task management program similar to Trello
+ntasks is a CLI task management program similar to Trello
 
 # Using ntasks
 Press: 
