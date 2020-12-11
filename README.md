@@ -3,11 +3,12 @@ A CLI task management program similar to Trello
 
 # Using ntasks
 Press: 
-```spacebar``` to change the selected list.
-```c``` to add a new card to the selected list. 
-```tab``` to change the selected card.
-```u``` followed by a number to move the selected card to a specific list.
+- ```spacebar``` to change the selected list.
+- ```c``` to add a new card to the selected list. 
+- ```tab``` to change the selected card.
+- ```u``` followed by a number to move the selected card to a specific list.
 
+# Screenshots
 ![MainBoard](/images/ntasks-ss.png)
 
 ## Compiling and Running
