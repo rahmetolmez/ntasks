@@ -5,7 +5,7 @@ ntasks is a CLI task management program similar to Trello
 Press: 
 - ```spacebar``` to change the selected list.
 - ```c``` to add a new card to the selected list. 
-- ```i``` & ```j``` to change the selected card.
+- ```j``` & ```k``` to change the selected card.
 - ```u``` followed by a number to move the selected card to a specific list.
 
 # Screenshots
